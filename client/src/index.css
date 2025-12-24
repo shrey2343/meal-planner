@@ -1,0 +1,142 @@
+/* src/index.css */
+:root {
+  --bg: #fff;
+  --text: #222;
+  --card-bg: #f9f9f9;
+}
+
+.dark {
+  --bg: #121212;
+  --text: #eee;
+  --card-bg: #1e1e1e;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.card {
+  background: var(--card-bg);
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+/* put this in App.css or index.css */
+.razorpay-checkout-container svg[width="auto"] {
+  width: 24px !important;
+  height: 24px !important;
+}
+
+
+.active:scale-95 {
+  transform: scale(0.95);
+}
+
+.footer {
+  margin-top: 4rem;
+  padding: 2rem;
+  background: linear-gradient(to right, #1f1f1f, #2c2c2c);
+  color: white;
+  font-family: 'Poppins', sans-serif;
+}
+
+.footer-glass {
+  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+.footer-top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.brand h2 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  color: #00e676;
+}
+
+.links ul {
+  list-style: none;
+  padding: 0;
+}
+
+.links ul li {
+  margin: 0.5rem 0;
+}
+
+.links ul li a {
+  color: #ccc;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.links ul li a:hover {
+  color: #00e676;
+}
+
+.contact p {
+  margin: 0.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.social-icons a {
+  margin-right: 1rem;
+  font-size: 1.2rem;
+  color: #ccc;
+  transition: color 0.3s;
+}
+
+.social-icons a:hover {
+  color: #00e676;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding-bottom: 2rem; /* space for footer */
+}
+
+.scroll-to-top {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 50%;
+  padding: 0.8rem;
+  cursor: pointer;
+  z-index: 999;
+  color: #00e676;
+  font-size: 1.2rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease;
+}
+
+.scroll-to-top:hover {
+  transform: scale(1.1);
+  background: rgba(0, 230, 118, 0.2);
+}
+

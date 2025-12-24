@@ -2,7 +2,16 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 const User = require('../models/User');
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+const model = genAI.getGenerativeModel({ 
+    model: 'gemini-2.5-flash',
+    generationConfig: {
+        temperature: 0.7,
+        topK: 40,
+        topP: 0.95,
+        maxOutputTokens: 8192,
+        responseMimeType: "application/json",
+    }
+});
 
 const calculateTDEE = (user) => {
     let bmr;
@@ -33,25 +42,23 @@ exports.generateMealPlan = async (user, planType) => {
     }
     const uniqueSeed = new Date().getTime();
 
-
+    
     const dietaryText = user.isVegetarian ? 'The meals must be strictly vegetarian.' : 'The meals can include meat, poultry, and fish.';
-
+    
     // Prompt structure for daily plan
-    let dailyPlanPrompt = `
-        Create a 3-meal plan for a day (breakfast, lunch, and dinner) for a person with the following details.
-        The **total daily calorie intake for all three meals combined must be as close as possible to ${targetCalories} kcal.**
-        The meals should be balanced to meet the target calories.
+        let dailyPlanPrompt = `
+        Create a 3-meal plan for a day (breakfast, lunch, and dinner).
+        The **total daily calorie intake for all three meals combined must be approximately ${targetCalories} kcal.**
+        Distribute calories reasonably across meals (e.g., breakfast: 25-30%, lunch: 35-40%, dinner: 30-35%).
         
-        **CRITICAL INSTRUCTION:** The **total daily calorie intake for all three meals combined MUST be EXACTLY ${targetCalories} kcal. If not exactly, it should be within a very narrow range of +/- 50 kcal.**
         ${dietaryText}
         Each meal should have a realistic recipe with ingredients and step-by-step instructions.
-       
+        
         At least one meal must feature a traditional Indian dish (e.g., poha, idli, dal, roti, curry, biryani, dosa, etc.).
         Ensure cuisines are varied — mix Indian and non-Indian meals in the day.
         Do NOT repeat any recipe in the same plan.
-        When generating a new plan, do not reuse recipes from previous responses, even if the unique ID changes.
 
-        For each recipe, include a high-quality, relevant image URL from a reliable source like Unsplash, Pexels, or a similar royalty-free image provider. The image URL should be direct and link to the image file itself (e.g., ending in .jpg, .png).
+        For each recipe, include a high-quality, relevant image URL from Unsplash or Pexels.
         
         User Profile:
         - Gender: ${user.gender}
@@ -61,28 +68,28 @@ exports.generateMealPlan = async (user, planType) => {
         - Activity Level: ${user.activityLevel}
         - Goal: ${user.goal}
 
-        Unique ID: ${uniqueSeed}
-
-        Provide the output as a single, clean JSON array of three objects. Do not include any additional text, markdown, or explanations outside of the JSON array.
+        CRITICAL: Return ONLY valid JSON. No comments, no explanations, no markdown.
         
-        The JSON structure MUST be an array of three objects.
-        Each object in the array represents a meal and MUST have the following properties:
-        - "mealType": "Breakfast", "Lunch", or "Dinner"
-        - "recipe": {
-            - "title": "Recipe Name"
-            - "description": "Short description of the recipe."
-            - "ingredients": ["ingredient 1", "ingredient 2", ...]
-            - "instructions": ["step 1", "step 2", ...]
-            - "nutritionInfo": {
-                - "calories": number
-                - "protein": number
-                - "carbs": number
-                - "fats": number
+        Return a JSON array with exactly 3 objects following this structure:
+        [
+            {
+                "mealType": "Breakfast",
+                "recipe": {
+                    "title": "Recipe Name",
+                    "description": "Short description",
+                    "ingredients": ["ingredient 1", "ingredient 2"],
+                    "instructions": ["step 1", "step 2"],
+                    "nutritionInfo": {
+                        "calories": 400,
+                        "protein": 20,
+                        "carbs": 50,
+                        "fats": 15
+                    },
+                    "imageUrl": "https://images.unsplash.com/photo-example.jpg"
+                }
             }
-            - "imageUrl": "URL of the recipe image"
-        }
+        ]
     `;
-
 
     // Prompt structure for weekly plan
     let weeklyPlanPrompt = `
@@ -93,7 +100,6 @@ exports.generateMealPlan = async (user, planType) => {
         ${dietaryText}
         Each meal should have a realistic recipe with ingredients and step-by-step instructions.
         
-
         For each recipe, include a high-quality, relevant image URL from a reliable source. The image URL should be direct and link to the image file itself (e.g., ending in .jpg, .png).
 
         User Profile:
@@ -134,10 +140,14 @@ exports.generateMealPlan = async (user, planType) => {
     try {
         const prompt = planType === 'weekly' ? weeklyPlanPrompt : dailyPlanPrompt;
         const result = await model.generateContent(prompt);
-        const response = await result.response;
+        
+        // Handle the response properly
+        const response = result.response;
         let text = response.text();
+        
+        // Clean up the response text
         text = text.replace(/```json/g, '').replace(/```/g, '').trim();
-
+        
         let mealPlanData;
         try {
             mealPlanData = JSON.parse(text);
@@ -149,7 +159,7 @@ exports.generateMealPlan = async (user, planType) => {
 
         // Return the appropriate data structure based on plan type
         if (planType === 'weekly') {
-            // Validate weekly plan structure
+             // Validate weekly plan structure
             if (!mealPlanData.weeklyPlan || !Array.isArray(mealPlanData.weeklyPlan) || mealPlanData.weeklyPlan.length !== 7) {
                 console.error('Generated meal plan is not a valid weekly plan:', mealPlanData);
                 throw new Error('Generated weekly meal plan is not valid.');
@@ -165,12 +175,17 @@ exports.generateMealPlan = async (user, planType) => {
         }
 
     } catch (error) {
-        console.error('Error generating meal plan with Gemini API:', error.message);
-        throw new Error('Failed to generate meal plan with AI.');
+        console.error('Error generating meal plan with Gemini API:', error);
+        
+        // Provide more specific error messages
+        if (error.message && error.message.includes('API key')) {
+            throw new Error('Invalid or expired Gemini API key. Please check your GEMINI_API_KEY in .env file.');
+        } else if (error.message && error.message.includes('quota')) {
+            throw new Error('Gemini API quota exceeded. Please try again later or check your API limits.');
+        } else if (error.message && error.message.includes('parse')) {
+            throw new Error('Failed to parse AI response. The AI returned invalid data.');
+        } else {
+            throw new Error(`Failed to generate meal plan with AI: ${error.message}`);
+        }
     }
 };
-
-
-
-
-

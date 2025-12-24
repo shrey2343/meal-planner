@@ -1,0 +1,557 @@
+
+/* client/src/index.css */
+
+@import "tailwindcss";
+
+/* Custom styles for a cleaner look */
+
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+
+/* client/src/App.css */
+
+/* Global styles for a clean look */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+}
+
+.meal-plan-card {
+    max-width: 960px;
+    margin: 40px auto;
+    padding: 32px;
+    background-color: #ffffff;
+    border-radius: 24px;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e5e7eb;
+}
+
+.main-heading {
+    font-size: 36px;
+    font-weight: 800;
+    margin-bottom: 32px;
+    text-align: center;
+    color: #1f2937;
+}
+
+.generate-btn {
+    background-color: #2563eb;
+    color: #ffffff;
+    font-weight: bold;
+    padding: 16px 48px;
+    border-radius: 9999px;
+    font-size: 20px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}
+
+.generate-btn:hover {
+    background-color: #1d4ed8;
+    transform: scale(1.05);
+}
+
+.generate-btn:active {
+    transform: scale(1.02);
+}
+
+.error-message {
+    background-color: #fee2e2;
+    color: #991b1b;
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    text-align: center;
+    border: 1px solid #fca5a5;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.meal-summary {
+    background-color: #f9fafb;
+    padding: 24px;
+    border-radius: 16px;
+    margin-bottom: 32px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.meal-summary p {
+    text-align: center;
+    color: #4b5563;
+    font-weight: 500;
+}
+
+.meal-summary h3 {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    color: #1f2937;
+}
+
+.meal-summary .calorie-target {
+    color: #2563eb;
+}
+
+/* Individual meal card styles */
+.meal-card {
+    position: relative; /* ताकि इमेज कार्ड के अंदर रहे */
+    overflow: hidden; /* ताकि इमेज कार्ड के बाहर न जाए */
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e5e7eb;
+    color: #fff; /* टेक्स्ट का रंग सफेद करें ताकि वह इमेज पर दिखे */
+}
+
+/* Background image style */
+.meal-card-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.5) blur(1px); /* इमेज को थोड़ा गहरा और धुंधला करें */
+    z-index: 1; /* टेक्स्ट के पीछे रखें */
+    transition: transform 0.5s ease-in-out;
+}
+
+.meal-card:hover .meal-card-bg {
+    transform: scale(1.1); /* hover पर इमेज को थोड़ा ज़ूम करें */
+}
+
+.meal-card-content {
+    position: relative; /* टेक्स्ट को इमेज के ऊपर लाएँ */
+    z-index: 2;
+}
+
+.meal-card-title,
+.recipe-title,
+.recipe-section h6,
+.nutrition-grid {
+    color: #fff; /* टेक्स्ट का रंग सफेद करें */
+}
+
+.recipe-description,
+.recipe-section ul,
+.recipe-section ol,
+.nutrition-item .label,
+.nutrition-item .unit {
+    color: #f0f0f0; /* थोड़ा हल्का सफेद रंग */
+}
+
+/* बाकी सब वैसे ही रहेगा */
+.meal-card-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+}
+
+.meal-card-title .icon {
+    font-size: 32px;
+    margin-right: 12px;
+}
+
+.recipe-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.recipe-description {
+    margin-bottom: 16px;
+}
+
+.recipe-section {
+    background-color: rgba(255, 255, 255, 0.2); /* ट्रांसपेरेंट बैकग्राउंड */
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    backdrop-filter: blur(5px); /* पीछे की इमेज धुंधली हो जाएगी */
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.recipe-section h6 {
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.recipe-section ul,
+.recipe-section ol {
+    list-style-type: disc;
+    list-style-position: inside;
+    margin-left: 8px;
+}
+
+.recipe-section ol {
+    list-style-type: decimal;
+}
+
+.nutrition-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    font-size: 14px;
+    font-weight: 600;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 16px;
+    border-radius: 12px;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.nutrition-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.nutrition-item .label {
+    font-size: 12px;
+}
+
+.nutrition-item .value {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.nutrition-item .unit {
+    font-size: 12px;
+}
+
+.no-meal-message {
+    text-align: center;
+    color: #6b7280;
+    margin-top: 32px;
+}
+
+
+.exercise-page {
+  padding: 2rem;
+}
+.filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.exercise-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+.exercise-card {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+.exercise-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+
+/* ===== ENHANCED ANIMATIONS & TRANSITIONS ===== */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-slide-in-right {
+    animation: slideInRight 0.6s ease-out forwards;
+}
+
+.animate-scale-in {
+    animation: scaleIn 0.5s ease-out forwards;
+}
+
+/* Stagger animation delays */
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+
+/* Smooth hover effects */
+.hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Glass morphism effect */
+.glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Gradient text */
+.gradient-text {
+    background: linear-gradient(135deg, #10b981, #059669);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Pulse animation for buttons */
+@keyframes pulse-green {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    }
+    50% {
+        box-shadow: 0 0 0 15px rgba(16, 185, 129, 0);
+    }
+}
+
+.pulse-green {
+    animation: pulse-green 2s infinite;
+}
+
+/* Loading skeleton */
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+/* Smooth scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #10b981, #059669);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #059669;
+}
+
+/* Card hover glow effect */
+.card-glow {
+    position: relative;
+    overflow: hidden;
+}
+
+.card-glow::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.card-glow:hover::before {
+    opacity: 1;
+}
+
+/* Floating animation */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.float {
+    animation: float 3s ease-in-out infinite;
+}
+
+/* Progress bar animation */
+@keyframes progress {
+    from {
+        width: 0%;
+    }
+}
+
+.progress-bar {
+    animation: progress 1s ease-out forwards;
+}
+
+
+/* ===== GLASSMORPHISM UTILITIES ===== */
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.glass-card-strong {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+}
+
+.glass-dark {
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.text-shadow-strong {
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.text-shadow-soft {
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Enhanced backdrop blur for better video visibility */
+.backdrop-blur-strong {
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+}
+
+.backdrop-blur-extra {
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+}
+
+
+/* ===== APP CONTAINER FIX ===== */
+.app-container {
+    background: transparent !important;
+    min-height: 100vh;
+}
+
+.main-content {
+    background: transparent !important;
+}
+
+/* Remove any default body backgrounds */
+body {
+    background: transparent !important;
+    margin: 0;
+    padding: 0;
+}
+
+#root {
+    background: transparent !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: left !important;
+}
