@@ -90,6 +90,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
+import OAuthHandler from './components/OAuthHandler';
 import AuthProvider from './context/AuthContext';
 import CartProvider from './context/CartContext';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -119,6 +120,7 @@ export default function App() {
     <Router>
       <AuthProvider>
         <CartProvider>
+          <OAuthHandler />
           <div className="app-container">
             <Navbar />
               <Toaster position="top-right" toastOptions={{ duration: 1000 }} />
